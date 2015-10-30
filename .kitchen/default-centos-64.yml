@@ -1,0 +1,7 @@
+---
+ssh_key: "/Users/steve/git/ectg-cookbooks/ectg-ucnext/.kitchen/docker_id_rsa"
+image_id: 4468061cd75d
+container_id: 7d76fbac34d0d74f241ce0f148196e1eda4690e0b83fbfe27c06beca75930448
+hostname: 192.168.99.100
+port: 32774
+last_action: converge
