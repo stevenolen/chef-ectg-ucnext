@@ -125,6 +125,7 @@ ucnext 'staging' do
   revision '40c5223ffa87b6e03c7e31ee90178522d650ca3f'
   port 3000
   secret rails_secrets['staging.ucnext.org']
+  db_password db_next
   deploy_path '/var/next'
   bundler_path '/usr/local/rbenv/shims'
 end
