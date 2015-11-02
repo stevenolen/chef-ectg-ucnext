@@ -50,8 +50,24 @@ mysql_service 'default' do
   action [:create, :start]
 end
 
-execute 'add test db info' do
-  command "/usr/bin/mysql -h 127.0.0.1 -uroot -p#{db_root}-e \"CREATE DATABASE IF NOT EXISTS next; GRANT ALL ON next.* to 'next' identified by '#{db_next}';\""
+mysql_connection = {
+  :host => '127.0.0.1',
+  :port => 3306,
+  :username => 'root',
+  :password => db_root
+}
+
+# set up ucnext db
+mysql2_chef_gem 'default'
+mysql_database 'next' do
+  connection mysql_connection
+  action :create
+end
+mysql_database_user 'next' do
+  connection mysql_connection
+  password db_next
+  database_name 'next'
+  action [:create,:grant]
 end
 
 # install nginx
