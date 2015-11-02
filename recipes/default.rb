@@ -42,7 +42,7 @@ end
 db_root_obj = ChefVault::Item.load("passwords", "db_root")
 db_root = db_root_obj['staging.ucnext.org']
 db_next_obj = ChefVault::Item.load("passwords", "next")
-db_next = db_next['staging.ucnext.org']
+db_next = db_next_obj['staging.ucnext.org']
 mysql_service 'default' do
   port '3306'
   version '5.6'
