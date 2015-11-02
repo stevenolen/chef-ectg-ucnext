@@ -119,12 +119,12 @@ include_recipe 'nodejs::npm'
 rbenv_global '2.2.3'
 rbenv_gem 'bundle'
 
-rails_secrets = ChefVault::Item.load("rails_secrets", "staging.ucnext.org")
+rails_secrets = ChefVault::Item.load("secrets", "rail_secret_tokens")
 # ucnext staging service
 ucnext 'staging' do
   revision '40c5223ffa87b6e03c7e31ee90178522d650ca3f'
   port 3000
-  secret rails_secrets['secret']
+  secret rails_secrets['staging.ucnext.org']
   deploy_path '/var/next'
   bundler_path '/usr/local/rbenv/shims'
 end
