@@ -122,7 +122,7 @@ rbenv_gem 'bundle'
 rails_secrets = ChefVault::Item.load("secrets", "rails_secret_tokens")
 # ucnext staging service
 ucnext 'staging' do
-  revision '40c5223ffa87b6e03c7e31ee90178522d650ca3f'
+  revision 'master'
   port 3000
   secret rails_secrets['staging.ucnext.org']
   db_password db_next
