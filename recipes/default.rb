@@ -119,7 +119,8 @@ include_recipe 'nodejs::npm'
 rbenv_global '2.2.3'
 rbenv_gem 'bundle'
 
-rails_secrets = ChefVault::Item.load("secrets", "rails_secret_tokens")
+rails_secrets = ChefVault::Item.load('secrets', 'rails_secret_tokens')
+smtp = ChefVault::Item.load('smtp', 'ucnext.org')
 # ucnext staging service
 ucnext 'staging' do
   revision 'master'
@@ -128,4 +129,7 @@ ucnext 'staging' do
   db_password db_next
   deploy_path '/var/next'
   bundler_path '/usr/local/rbenv/shims'
+  smtp_host smtp['host']
+  smtp_username smtp['username']
+  smtp_password smtp['password']
 end
