@@ -38,11 +38,13 @@ service 'elasticsearch' do # recipe above does *not* currently start the service
   action :start
 end
 
+fqdn = node['fqdn'] # easier accessor :)
+
 # install mysql
 db_root_obj = ChefVault::Item.load("passwords", "db_root")
-db_root = db_root_obj['staging.ucnext.org']
+db_root = db_root_obj[fqdn]
 db_next_obj = ChefVault::Item.load("passwords", "next")
-db_next = db_next_obj['staging.ucnext.org']
+db_next = db_next_obj[fqdn]
 mysql_service 'default' do
   port '3306'
   version '5.6'
@@ -70,6 +72,20 @@ mysql_database_user 'next' do
   action [:create,:grant]
 end
 
+# a few case-y things based on hostname
+case fqdn
+when 'ucnext.org'
+  @app_name = 'prod' # name of ucnext service
+  bridge_secrets = ChefVault::Item.load('secrets', 'oauth2')
+  include_recipe 'etcg-ucnext::_bridge' # add bridge
+  @bridge_enabled = true
+  @app_revision = '1.0.36'
+when 'staging.ucnext.org'
+  @app_name = 'staging'
+  @bridge_enabled = false
+  @app_revision = 'master'
+end
+
 # install nginx
 node.set['nginx']['default_site_enabled'] = false
 node.set['nginx']['install_method'] = 'package'
@@ -80,15 +96,15 @@ directory '/etc/ssl/private' do
   recursive true
 end
 
-ssl_key_cert = ChefVault::Item.load('ssl', 'staging.ucnext.org') # gets ssl certs from chef-vault
-file "/etc/ssl/certs/staging.ucnext.org.crt" do
+ssl_key_cert = ChefVault::Item.load('ssl', fqdn) # gets ssl certs from chef-vault
+file "/etc/ssl/certs/#{fqdn}" do
   owner 'root'
   group 'root'
   mode '0777'
   content ssl_key_cert['cert']
   notifies :reload, 'service[nginx]', :delayed
 end
-file "/etc/ssl/private/staging.ucnext.org.key" do
+file "/etc/ssl/private/#{fqdn}" do
   owner 'root'
   group 'root'
   mode '0600'
@@ -102,8 +118,8 @@ template '/etc/nginx/sites-available/ucnext' do
   action :create
   variables(
     port: 3000,
-    fqdn: 'staging.ucnext.org',
-    path: '/var/www/' # not used.
+    path: '/var/www/', # not used.
+    bridge_enabled: @bridge_enabled
   )
   notifies :reload, 'service[nginx]', :delayed
 end
@@ -121,11 +137,11 @@ rbenv_gem 'bundle'
 
 rails_secrets = ChefVault::Item.load('secrets', 'rails_secret_tokens')
 smtp = ChefVault::Item.load('smtp', 'ucnext.org')
-# ucnext staging service
-ucnext 'staging' do
-  revision 'master'
+
+ucnext @app_name do
+  revision @app_revision
   port 3000
-  secret rails_secrets['staging.ucnext.org']
+  secret rails_secrets[fqdn]
   db_password db_next
   deploy_path '/var/next'
   bundler_path '/usr/local/rbenv/shims'
@@ -133,3 +149,7 @@ ucnext 'staging' do
   smtp_username smtp['username']
   smtp_password smtp['password']
 end
+
+# swap out the default production.yml template for this one.
+resources("template[/var/next/shared/config/production.yml]").cookbook 'ectg-ucnext'
+resources("template[/var/next/shared/config/production.yml]").variables(secret: bridge_secrets['next'])
