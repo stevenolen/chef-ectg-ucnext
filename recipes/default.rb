@@ -77,13 +77,15 @@ case fqdn
 when 'ucnext.org'
   @app_name = 'prod' # name of ucnext service
   bridge_secrets = ChefVault::Item.load('secrets', 'oauth2')
-  include_recipe 'etcg-ucnext::_bridge' # add bridge
+  shib_secret = bridge_secrets['next']
+  include_recipe 'ectg-ucnext::_bridge' # add bridge
   @bridge_enabled = true
-  @app_revision = '1.0.36'
+  app_revision = '1.0.36'
 when 'staging.ucnext.org'
   @app_name = 'staging'
   @bridge_enabled = false
-  @app_revision = 'master'
+  app_revision = 'master'
+  shib_secret = nil
 end
 
 # install nginx
@@ -96,7 +98,7 @@ directory '/etc/ssl/private' do
   recursive true
 end
 
-ssl_key_cert = ChefVault::Item.load('ssl', fqdn) # gets ssl certs from chef-vault
+ssl_key_cert = ChefVault::Item.load('ssl', fqdn) # gets ssl cert from chef-vault
 file "/etc/ssl/certs/#{fqdn}" do
   owner 'root'
   group 'root'
@@ -139,7 +141,7 @@ rails_secrets = ChefVault::Item.load('secrets', 'rails_secret_tokens')
 smtp = ChefVault::Item.load('smtp', 'ucnext.org')
 
 ucnext @app_name do
-  revision @app_revision
+  revision app_revision
   port 3000
   secret rails_secrets[fqdn]
   db_password db_next
@@ -148,8 +150,5 @@ ucnext @app_name do
   smtp_host smtp['host']
   smtp_username smtp['username']
   smtp_password smtp['password']
+  shib_secret shib_secret
 end
-
-# swap out the default production.yml template for this one.
-resources("template[/var/next/shared/config/production.yml]").cookbook 'ectg-ucnext'
-resources("template[/var/next/shared/config/production.yml]").variables(secret: bridge_secrets['next'])

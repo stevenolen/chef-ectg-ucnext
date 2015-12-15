@@ -1,6 +1,15 @@
 # adds shib-oauth2-bridge
+fqdn = node['fqdn']
+db_root_obj = ChefVault::Item.load("passwords", "db_root")
+db_root = db_root_obj[fqdn]
+mysql_connection = {
+  :host => '127.0.0.1',
+  :port => 3306,
+  :username => 'root',
+  :password => db_root
+}
 
-db_bridge_obj = ChefVault::Item.load("passwords", "bridge")
+db_bridge_obj = ChefVault::Item.load('passwords', 'bridge')
 db_bridge = db_bridge_obj[fqdn]
 
 mysql_database 'bridge' do
@@ -16,13 +25,6 @@ end
 
 include_recipe 'shib-oauth2-bridge::shibd'
 package 'git'
-
-yum_repository 'epel' do
-  description 'Extra Packages for Enterprise Linux'
-  mirrorlist 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-6&arch=$basearch'
-  gpgkey 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
-  action :create
-end
 
 yum_repository 'remi' do
   description 'Les RPM de Remi - Repository'
@@ -42,6 +44,7 @@ end
   package pkg
 end
 
+bridge_secrets = ChefVault::Item.load('secrets', 'oauth2')
 shib_oauth2_bridge 'default' do
   db_user 'bridge'
   db_name 'bridge'
