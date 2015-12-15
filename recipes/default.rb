@@ -99,14 +99,14 @@ directory '/etc/ssl/private' do
 end
 
 ssl_key_cert = ChefVault::Item.load('ssl', fqdn) # gets ssl cert from chef-vault
-file "/etc/ssl/certs/#{fqdn}" do
+file "/etc/ssl/certs/#{fqdn}.crt" do
   owner 'root'
   group 'root'
   mode '0777'
   content ssl_key_cert['cert']
   notifies :reload, 'service[nginx]', :delayed
 end
-file "/etc/ssl/private/#{fqdn}" do
+file "/etc/ssl/private/#{fqdn}.key" do
   owner 'root'
   group 'root'
   mode '0600'
