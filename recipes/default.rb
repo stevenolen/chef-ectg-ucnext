@@ -75,15 +75,15 @@ end
 # a few case-y things based on hostname
 case fqdn
 when 'ucnext.org'
-  @app_name = 'prod' # name of ucnext service
+  app_name = 'prod' # name of ucnext service
   bridge_secrets = ChefVault::Item.load('secrets', 'oauth2')
   shib_secret = bridge_secrets['next']
   include_recipe 'ectg-ucnext::_bridge' # add bridge
-  @bridge_enabled = true
+  bridge_enabled = true
   app_revision = '1.0.36'
 when 'staging.ucnext.org'
   @app_name = 'staging'
-  @bridge_enabled = false
+  bridge_enabled = false
   app_revision = 'master'
   shib_secret = nil
 end
@@ -121,7 +121,7 @@ template '/etc/nginx/sites-available/ucnext' do
   variables(
     port: 3000,
     path: '/var/www/', # not used.
-    bridge_enabled: @bridge_enabled
+    bridge_enabled: bridge_enabled
   )
   notifies :reload, 'service[nginx]', :delayed
 end
@@ -140,7 +140,7 @@ rbenv_gem 'bundle'
 rails_secrets = ChefVault::Item.load('secrets', 'rails_secret_tokens')
 smtp = ChefVault::Item.load('smtp', 'ucnext.org')
 
-ucnext @app_name do
+ucnext app_name do
   revision app_revision
   port 3000
   secret rails_secrets[fqdn]
