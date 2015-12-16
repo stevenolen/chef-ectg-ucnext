@@ -82,7 +82,7 @@ when 'ucnext.org'
   bridge_enabled = true
   app_revision = '1.0.36'
 when 'staging.ucnext.org'
-  @app_name = 'staging'
+  app_name = 'staging'
   bridge_enabled = false
   app_revision = 'master'
   shib_secret = nil
