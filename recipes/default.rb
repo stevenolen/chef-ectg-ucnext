@@ -80,7 +80,7 @@ when 'ucnext.org'
   shib_secret = bridge_secrets['next']
   include_recipe 'ectg-ucnext::_bridge' # add bridge
   bridge_enabled = true
-  app_revision = '1.0.36'
+  app_revision = '1.0.38.alpha'
 when 'staging.ucnext.org'
   app_name = 'staging'
   bridge_enabled = false
