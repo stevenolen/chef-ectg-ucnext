@@ -24,6 +24,7 @@ mysql_database_user 'bridge' do
 end
 
 include_recipe 'shib-oauth2-bridge::shibd'
+include_recipe 'shib-oauth2-bridge::shib-ds'
 package 'git'
 
 yum_repository 'remi' do
