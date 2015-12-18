@@ -98,6 +98,7 @@ directory '/etc/ssl/private' do
   recursive true
 end
 
+# add SSL certs to box
 ssl_key_cert = ChefVault::Item.load('ssl', fqdn) # gets ssl cert from chef-vault
 file "/etc/ssl/certs/#{fqdn}.crt" do
   owner 'root'
@@ -114,6 +115,7 @@ file "/etc/ssl/private/#{fqdn}.key" do
   notifies :reload, 'service[nginx]', :delayed
 end
 
+# nginx conf
 template '/etc/nginx/sites-available/ucnext' do
   source 'ucnext.conf.erb'
   mode '0775'
@@ -140,6 +142,7 @@ rbenv_gem 'bundle'
 rails_secrets = ChefVault::Item.load('secrets', 'rails_secret_tokens')
 smtp = ChefVault::Item.load('smtp', 'ucnext.org')
 
+# set up ucnext!
 ucnext app_name do
   revision app_revision
   port 3000

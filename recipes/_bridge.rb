@@ -1,5 +1,31 @@
 # adds shib-oauth2-bridge
-fqdn = node['fqdn']
+
+# additional packages/repos needed.
+yum_repository 'remi' do
+  description 'Les RPM de Remi - Repository'
+  mirrorlist 'http://rpms.famillecollet.com/enterprise/6/remi/mirror'
+  gpgkey 'http://rpms.famillecollet.com/RPM-GPG-KEY-remi'
+  action :create
+end
+
+yum_repository 'remi-php55' do
+  description 'Les RPM de Remi PHP55 - Repository'
+  mirrorlist 'http://rpms.famillecollet.com/enterprise/6/php55/mirror'
+  gpgkey 'http://rpms.famillecollet.com/RPM-GPG-KEY-remi'
+  action :create
+end
+
+%w(git php php-mcrypt php-mysql php-mbstring).each do |pkg|
+  package pkg
+end
+
+# shib config
+include_recipe 'shib-oauth2-bridge::shibd'
+include_recipe 'shib-oauth2-bridge::shib-ds'
+
+fqdn = node['fqdn'] # quick variable accessor
+
+# db config
 db_root_obj = ChefVault::Item.load("passwords", "db_root")
 db_root = db_root_obj[fqdn]
 mysql_connection = {
@@ -23,10 +49,7 @@ mysql_database_user 'bridge' do
   action [:create,:grant]
 end
 
-# shib config
-include_recipe 'shib-oauth2-bridge::shibd'
-include_recipe 'shib-oauth2-bridge::shib-ds'
-
+# shib keys
 sp_ssl = ChefVault::Item.load('shibboleth', fqdn) # gets ssl cert from chef-vault
 file '/etc/shibboleth/sp-cert.pem' do
   owner 'shibd'
@@ -43,26 +66,7 @@ file '/etc/shibboleth/sp-key.pem' do
   notifies :reload, 'service[shibd]', :delayed
 end
 
-package 'git'
-
-yum_repository 'remi' do
-  description 'Les RPM de Remi - Repository'
-  mirrorlist 'http://rpms.famillecollet.com/enterprise/6/remi/mirror'
-  gpgkey 'http://rpms.famillecollet.com/RPM-GPG-KEY-remi'
-  action :create
-end
-
-yum_repository 'remi-php55' do
-  description 'Les RPM de Remi PHP55 - Repository'
-  mirrorlist 'http://rpms.famillecollet.com/enterprise/6/php55/mirror'
-  gpgkey 'http://rpms.famillecollet.com/RPM-GPG-KEY-remi'
-  action :create
-end
-
-%w(php php-mcrypt php-mysql php-mbstring).each do |pkg|
-  package pkg
-end
-
+# shib bridge setup
 bridge_secrets = ChefVault::Item.load('secrets', 'oauth2')
 shib_oauth2_bridge 'default' do
   db_user 'bridge'
