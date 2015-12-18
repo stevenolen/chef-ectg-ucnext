@@ -74,6 +74,7 @@ shib_oauth2_bridge 'default' do
   hostname 'ucnext.org'
   db_password db_bridge
   clients [
-    {id: 'next', name: 'next', secret: bridge_secrets['next'], redirect_uri: 'https://ucnext.org/auth/oauth2/shibboleth'}
+    {id: 'next', name: 'next', secret: bridge_secrets['next'], redirect_uri: 'https://ucnext.org/auth/oauth2/shibboleth'},
+    {id: 'staging_next', name: 'staging_next', secret: bridge_secrets['staging_next'], redirect_uri: 'https://staging.ucnext.org/auth/oauth2/shibboleth'}
   ]
 end

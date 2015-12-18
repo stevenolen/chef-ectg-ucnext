@@ -85,7 +85,7 @@ when 'staging.ucnext.org'
   app_name = 'staging'
   bridge_enabled = false
   app_revision = 'master'
-  shib_secret = nil
+  shib_secret = bridge_secrets['staging_next']
 end
 
 # install nginx
