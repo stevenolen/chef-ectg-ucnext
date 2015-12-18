@@ -73,10 +73,10 @@ mysql_database_user 'next' do
 end
 
 # a few case-y things based on hostname
+bridge_secrets = ChefVault::Item.load('secrets', 'oauth2')
 case fqdn
 when 'ucnext.org'
   app_name = 'prod' # name of ucnext service
-  bridge_secrets = ChefVault::Item.load('secrets', 'oauth2')
   shib_secret = bridge_secrets['next']
   include_recipe 'ectg-ucnext::_bridge' # add bridge
   bridge_enabled = true
