@@ -23,8 +23,26 @@ mysql_database_user 'bridge' do
   action [:create,:grant]
 end
 
+# shib config
 include_recipe 'shib-oauth2-bridge::shibd'
 include_recipe 'shib-oauth2-bridge::shib-ds'
+
+sp_ssl = ChefVault::Item.load('shibboleth', fqdn) # gets ssl cert from chef-vault
+file '/etc/shibboleth/sp-cert.pem' do
+  owner 'shibd'
+  group 'shibd'
+  mode '0777'
+  content sp_ssl['cert']
+  notifies :reload, 'service[shibd]', :delayed
+end
+file '/etc/shibboleth/sp-key.pem' do
+  owner 'shibd'
+  group 'shibd'
+  mode '0600'
+  content sp_ssl['key']
+  notifies :reload, 'service[shibd]', :delayed
+end
+
 package 'git'
 
 yum_repository 'remi' do
