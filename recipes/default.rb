@@ -73,19 +73,18 @@ mysql_database_user 'next' do
 end
 
 # a few case-y things based on hostname
-bridge_secrets = ChefVault::Item.load('secrets', 'oauth2')
 case fqdn
 when 'ucnext.org'
   app_name = 'prod' # name of ucnext service
-  shib_secret = bridge_secrets['next']
+  shib_client = 'next'
   include_recipe 'ectg-ucnext::_bridge' # add bridge
   bridge_enabled = true
   app_revision = '1.0.38.alpha'
 when 'staging.ucnext.org'
   app_name = 'staging'
+  shib_client = 'staging_next'
   bridge_enabled = false
   app_revision = 'master'
-  shib_secret = bridge_secrets['staging_next']
 end
 
 # install nginx
@@ -141,6 +140,7 @@ rbenv_gem 'bundle'
 
 rails_secrets = ChefVault::Item.load('secrets', 'rails_secret_tokens')
 smtp = ChefVault::Item.load('smtp', 'ucnext.org')
+bridge_secrets = ChefVault::Item.load('secrets', 'oauth2')
 
 # set up ucnext!
 ucnext app_name do
@@ -153,5 +153,6 @@ ucnext app_name do
   smtp_host smtp['host']
   smtp_username smtp['username']
   smtp_password smtp['password']
-  shib_secret shib_secret
+  shib_client_name shib_client
+  shib_secret bridge_secrets[shib_client]
 end
