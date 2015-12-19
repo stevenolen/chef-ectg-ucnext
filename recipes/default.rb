@@ -80,11 +80,13 @@ when 'ucnext.org'
   include_recipe 'ectg-ucnext::_bridge' # add bridge
   bridge_enabled = true
   app_revision = '1.0.38.alpha'
+  rails_env = 'production'
 when 'staging.ucnext.org'
   app_name = 'staging'
   shib_client = 'staging_next'
   bridge_enabled = false
   app_revision = 'master'
+  rails_env = 'staging'
 end
 
 # install nginx
@@ -155,4 +157,5 @@ ucnext app_name do
   smtp_password smtp['password']
   shib_client_name shib_client
   shib_secret bridge_secrets[shib_client]
+  rails_env rails_env
 end
