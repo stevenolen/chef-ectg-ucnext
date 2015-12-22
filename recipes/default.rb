@@ -79,7 +79,7 @@ when 'ucnext.org'
   shib_client = 'next'
   include_recipe 'ectg-ucnext::_bridge' # add bridge
   bridge_enabled = true
-  app_revision = '1.0.38.alpha'
+  app_revision = '1.0.38'
   rails_env = 'production'
 when 'staging.ucnext.org'
   app_name = 'staging'
