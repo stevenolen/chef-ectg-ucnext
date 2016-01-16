@@ -21,22 +21,7 @@ chef_gem 'chef-vault'
 require 'chef-vault'
 
 # some basic package deps. only tested on rhel family.
-%w(tar java-1.7.0-openjdk git).each do |pkg|
-  package pkg
-end
-
-# install ES
-elasticsearch_user 'elasticsearch'
-elasticsearch_install 'elasticsearch' do
-  type :tarball
-  version '1.7.2'
-end
-elasticsearch_configure 'elasticsearch'
-elasticsearch_service 'elasticsearch'
-
-service 'elasticsearch' do # recipe above does *not* currently start the service
-  action :start
-end
+package 'git'
 
 fqdn = node['fqdn'] # easier accessor :)
 
@@ -158,4 +143,5 @@ ucnext app_name do
   shib_client_name shib_client
   shib_secret bridge_secrets[shib_client]
   rails_env rails_env
+  # assumes es_host is localhost!
 end
