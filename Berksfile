@@ -3,7 +3,6 @@ source 'https://supermarket.chef.io'
 metadata
 
 cookbook 'ucnext', git: 'https://github.com/universityofcalifornia/chef-ucnext.git'
-cookbook 'elasticsearch', '~> 1.0.0'
 cookbook 'mysql', '~> 6.0'
 cookbook 'ruby_rbenv', '~> 1.0'
 cookbook 'ruby_build'
