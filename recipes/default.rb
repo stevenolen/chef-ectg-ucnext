@@ -62,7 +62,6 @@ case fqdn
 when 'ucnext.org'
   app_name = 'prod' # name of ucnext service
   shib_client = 'next'
-  include_recipe 'ectg-ucnext::_bridge' # add bridge
   bridge_enabled = true
   app_revision = '1.0.38'
   rails_env = 'production'
