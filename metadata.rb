@@ -4,7 +4,7 @@ maintainer_email 'technolengy@gmail.com'
 license 'Apache 2.0'
 description 'Installs/Configures ectg-ucnext'
 long_description 'Installs/Configures ectg-ucnext'
-version '0.3.20'
+version '0.3.21'
 
 depends 'ucnext'
 depends 'mysql'
