@@ -18,4 +18,4 @@ dns:
 
 suites:
   - name: default
-    run_list: ['ectg-ucnext::default']
+    run_list: ['mwser-ucnext::default']

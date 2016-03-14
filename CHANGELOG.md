@@ -1,3 +1,3 @@
 # 0.1.0
 
-Initial release of ectg-ucnext
+Initial release of mwser-ucnext

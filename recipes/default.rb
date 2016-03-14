@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: ectg-ucnext
+# Cookbook Name:: mwser-ucnext
 # Recipe:: default
 #
 # Copyright (C) 2015 UC Regents
@@ -23,7 +23,11 @@ require 'chef-vault'
 # some basic package deps. only tested on rhel family.
 package 'git'
 
-fqdn = node['fqdn'] # easier accessor :)
+fqdn = if node['fqdn'] == 'ucnext.org'
+         'ucnext.org'
+       else
+         'staging.ucnext.org'
+       end
 
 # install mysql
 db_root_obj = ChefVault::Item.load("passwords", "db_root")
