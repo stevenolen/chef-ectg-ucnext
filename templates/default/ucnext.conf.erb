@@ -12,11 +12,11 @@ upstream httpd {
 
 ##LISTEN ON HTTPS##
 server {
-  server_name <%= node[:fqdn] %>;
+  server_name <%= @fqdn %>;
   listen 443;
   ssl on;
-  ssl_certificate /etc/ssl/certs/<%= node[:fqdn] %>.crt;
-  ssl_certificate_key /etc/ssl/private/<%= node[:fqdn] %>.key;
+  ssl_certificate /etc/ssl/certs/<%= @fqdn %>.crt;
+  ssl_certificate_key /etc/ssl/private/<%= @fqdn %>.key;
   root <%= @path %>;
   index index.html;
   client_body_buffer_size 100m;

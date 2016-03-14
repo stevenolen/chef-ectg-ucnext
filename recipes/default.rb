@@ -112,7 +112,8 @@ template '/etc/nginx/sites-available/ucnext' do
   variables(
     port: 3000,
     path: '/var/www/', # not used.
-    bridge_enabled: bridge_enabled
+    bridge_enabled: bridge_enabled,
+    fqdn: fqdn
   )
   notifies :reload, 'service[nginx]', :delayed
 end
