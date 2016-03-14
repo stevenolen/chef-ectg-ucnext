@@ -31,7 +31,7 @@ fqdn = if node['fqdn'] == 'ucnext.org'
 
 # install mysql
 db_root_obj = ChefVault::Item.load("passwords", "db_root")
-db_root = db_root_obj[fqdn]
+db_root = db_root_obj[node['fqdn']]
 db_next_obj = ChefVault::Item.load("passwords", "next")
 db_next = db_next_obj[fqdn]
 mysql_service 'default' do

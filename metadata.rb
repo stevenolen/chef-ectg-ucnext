@@ -4,7 +4,7 @@ maintainer_email 'technolengy@gmail.com'
 license 'Apache 2.0'
 description 'Installs/Configures mwser-ucnext'
 long_description 'Installs/Configures mwser-ucnext'
-version '0.3.23'
+version '0.3.24'
 
 depends 'ucnext'
 depends 'mysql'
