@@ -40,6 +40,12 @@ mysql_service 'default' do
   initial_root_password db_root
   action [:create, :start]
 end
+mysql_config 'utf8mb4' do
+  source 'utf8mb4.erb'
+  instance 'default'
+  notifies :restart, 'mysql_service[default]'
+  action :create
+end
 
 mysql_connection = {
   :host => '127.0.0.1',
