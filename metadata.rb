@@ -1,6 +1,6 @@
 name 'mwser-ucnext'
-maintainer 'Steve Nolen'
-maintainer_email 'technolengy@gmail.com'
+maintainer 'Ed Sakabu'
+maintainer_email 'EdSakabu@ucla.edu'
 license 'Apache 2.0'
 description 'Installs/Configures mwser-ucnext'
 long_description 'Installs/Configures mwser-ucnext'
