@@ -74,6 +74,7 @@ server {
   server_name www.ucnext.org;
   listen 443;
   ssl on;
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
   ssl_certificate /etc/ssl/certs/ucnext.org.crt;
   ssl_certificate_key /etc/ssl/private/ucnext.org.key;
   return 301 $scheme://ucnext.org$request_uri;
