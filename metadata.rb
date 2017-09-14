@@ -4,7 +4,7 @@ maintainer_email 'EdSakabu@ucla.edu'
 license 'Apache 2.0'
 description 'Installs/Configures mwser-ucnext'
 long_description 'Installs/Configures mwser-ucnext'
-version '0.3.33'
+version '0.3.34'
 
 depends 'ucnext'
 depends 'mysql'
