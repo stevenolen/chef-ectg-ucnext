@@ -73,7 +73,7 @@ when 'ucnext.org'
   app_name = 'prod' # name of ucnext service
   shib_client = 'next'
   bridge_enabled = true
-  app_revision = '1.0.44'
+  app_revision = '1.0.48'
   rails_env = 'production'
 when 'staging.ucnext.org'
   app_name = 'staging'
