@@ -45,7 +45,7 @@ GRAPH
     yum (>= 0.0.0)
     yum-epel (>= 0.0.0)
     yum-scl (>= 0.0.0)
-  mwser-ucnext (0.3.40)
+  mwser-ucnext (0.3.41)
     database (>= 0.0.0)
     mysql (>= 0.0.0)
     mysql2_chef_gem (>= 0.0.0)
